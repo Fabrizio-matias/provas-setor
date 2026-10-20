@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes da Prova - Setor de Provas</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Menu Lateral (Sidebar) -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-icon">P</div>
+        <div class="brand-title">
+          <span class="brand-name">Setor de Provas</span>
+          <span class="brand-subtitle">Colégio Integrado</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Menu Principal</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="provas.html" class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Todas as Provas
+        </a>
+        <a href="relatorios.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatórios & Métricas
+        </a>
+        <a href="usuarios.html" class="nav-item admin-only">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Gerenciar Usuários
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="font-size: 0.72rem; color: #64748b; text-align: center;">
+          Sistema Setor de Provas v1.0
+        </div>
+      </div>
+    </aside>
+
+    <!-- Estrutura Principal -->
+    <div class="main-wrapper">
+      <!-- Header Superior -->
+      <header class="top-header">
+        <div class="header-left">
+          <button id="toggle-sidebar" class="toggle-sidebar-btn" aria-label="Abrir menu">
+            <svg style="width:24px; height:24px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <a href="provas.html" style="display:flex; align-items:center; gap:0.4rem; color:var(--text-muted); font-size:0.88rem; font-weight:600;">
+            <svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="15 18 9 12 15 6"/></svg>
+            Voltar para Provas
+          </a>
+        </div>
+
+        <div class="header-right">
+          <div class="user-profile-widget">
+            <div id="user-avatar-initials" class="user-avatar">U</div>
+            <div class="user-meta">
+              <span id="user-nome" class="user-name">Carregando...</span>
+              <span id="user-perfil" class="user-role-badge">Perfil</span>
+            </div>
+          </div>
+          <button id="btn-logout" class="btn-logout" title="Sair do sistema">
+            <svg style="width:18px; height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Sair</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Conteúdo da Página -->
+      <main class="page-content">
+        <!-- Cabeçalho da Prova e Ação de Impressão -->
+        <div style="background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.5rem; box-shadow:var(--shadow-sm); display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1.25rem;">
+          <div>
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.4rem; flex-wrap:wrap;">
+              <span id="detalhe-codigo" style="font-family:monospace; font-size:0.95rem; font-weight:700; color:var(--primary); background:var(--primary-light); padding:0.2rem 0.6rem; border-radius:var(--radius-sm);">PRV-...</span>
+              <span id="detalhe-trimestre" class="badge-trimestre">-</span>
+              <span id="detalhe-divisao" class="badge-divisao">-</span>
+              <span id="detalhe-status" class="status-badge">-</span>
+            </div>
+            <h1 id="detalhe-titulo" style="font-size: 1.6rem; margin-bottom: 0.35rem;">Carregando avaliação...</h1>
+            <p id="detalhe-subtitulo" style="color: var(--text-muted); font-size: 0.9rem;">Professor: - | Turma: - | Disciplina: -</p>
+          </div>
+
+          <!-- Botão Crítico de Impressão -->
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.4rem;">
+            <button id="btn-imprimir-prova" class="btn btn-print" disabled>
+              <svg id="icon-print-lock" style="width:18px; height:18px;" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+              </svg>
+              <span id="lbl-btn-impressao">Impressão Bloqueada</span>
+            </button>
+            <span id="detalhe-aviso-impressao" style="font-size:0.75rem; color:var(--text-muted); max-width:260px; text-align:right;">
+              Aguardando aprovação final do Setor de Provas para liberação.
+            </span>
+          </div>
+        </div>
+
+        <!-- Esteira Visual de Workflow (Timeline de Etapas) -->
+        <div class="stepper-container">
+          <div class="stepper-steps">
+            <div id="step-enviada" class="step-item">
+              <div class="step-circle">1</div>
+              <div class="step-title">Enviada</div>
+            </div>
+            <div id="step-conferencia" class="step-item">
+              <div class="step-circle">2</div>
+              <div class="step-title">Conferência</div>
+            </div>
+            <div id="step-validacao" class="step-item">
+              <div class="step-circle">3</div>
+              <div class="step-title">Validação Docente</div>
+            </div>
+            <div id="step-aprovacao" class="step-item">
+              <div class="step-circle">4</div>
+              <div class="step-title">Aprovação Final</div>
+            </div>
+            <div id="step-impressao" class="step-item">
+              <div class="step-circle">5</div>
+              <div class="step-title">Liberada Impressão</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra Dinâmica de Ações do Fluxo de Trabalho (Controlada por Perfil) -->
+        <div class="table-card" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <h3 style="font-size: 1rem; margin-bottom: 0.15rem;">Ações Disponíveis para o seu Perfil</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                Apenas operações autorizadas para a etapa atual são exibidas.
+              </p>
+            </div>
+            <div id="toolbar-acoes" style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+              <!-- Botões injetados dinamicamente via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid de Metadados e Informações Gerais -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+          <!-- Card de Informações Cadastrais -->
+          <div class="table-card" style="margin-bottom:0; padding:1.5rem;">
+            <h3 style="font-size:1.1rem; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
+              Dados da Avaliação
+            </h3>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1.25rem;">
+              <div>
+                <span class="form-label">Professor Titular:</span>
+                <p id="info-professor" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+              <div>
+                <span class="form-label">Disciplina:</span>
+                <p id="info-disciplina" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+              <div>
+                <span class="form-label">Turma:</span>
+                <p id="info-turma" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+              <div>
+                <span class="form-label">Trimestre:</span>
+                <p id="info-trimestre" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+              <div>
+                <span class="form-label">Divisão:</span>
+                <p id="info-divisao" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+              <div>
+                <span class="form-label">Data de Aplicação:</span>
+                <p id="info-data-aplicacao" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+              <div>
+                <span class="form-label">Prazo de Entrega do Setor:</span>
+                <p id="info-prazo" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+              <div>
+                <span class="form-label">Versão Atual:</span>
+                <p id="info-versao-atual" style="font-weight:600; font-size:0.95rem;">-</p>
+              </div>
+            </div>
+
+            <div style="margin-top:1.25rem; padding-top:1rem; border-top:1px solid var(--border);">
+              <span class="form-label">Observações e Orientações Gerais:</span>
+              <p id="info-observacoes" style="font-size:0.9rem; color:var(--text-secondary); white-space:pre-line; margin-top:0.35rem;">
+                Nenhuma observação informada.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card de Status da Aprovação para Impressão -->
+          <div class="table-card" style="margin-bottom:0; padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <h3 style="font-size:1.1rem; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
+                Chancela de Impressão
+              </h3>
+              <div id="box-status-aprovacao">
+                <!-- Informações de aprovação preenchidas via JS -->
+              </div>
+            </div>
+            <div style="background:var(--bg-muted); border-radius:var(--radius-md); padding:0.85rem; font-size:0.75rem; color:var(--text-muted); margin-top:1rem;">
+              <strong>Regra Institucional:</strong> A impressão somente pode ser liberada mediante aprovação do responsável do setor na versão exata em vigor.
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela de Histórico de Versões -->
+        <div class="table-card">
+          <div class="table-header-box">
+            <div>
+              <h3 class="table-title">Histórico de Versões do Arquivo</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                Todas as versões são preservadas. O envio de uma nova versão invalida autorizações anteriores.
+              </p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="abrirModalNovaVersao()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Enviar Nova Versão
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Versão</th>
+                  <th>Arquivo / Tamanho</th>
+                  <th>Responsável pelo Envio</th>
+                  <th>Data de Envio</th>
+                  <th>Descrição das Alterações</th>
+                  <th>Alterou Conteúdo?</th>
+                  <th>Validação Docente</th>
+                  <th>Aprovação Setor</th>
+                  <th style="text-align: right;">Download</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-versoes">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Histórico de Atividades / Auditoria desta Prova -->
+        <div class="table-card">
+          <div class="table-header-box">
+            <h3 class="table-title">Registro de Auditoria da Prova</h3>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Rastreabilidade de todas as ações e alterações</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Data / Hora</th>
+                  <th>Usuário</th>
+                  <th>Ação</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-auditoria-prova">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Enviar Nova Versão -->
+  <div id="modal-nova-versao" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Enviar Nova Versão da Prova</h3>
+        <button class="modal-close-btn" onclick="fecharModalNovaVersao()">&times;</button>
+      </div>
+      <form id="form-nova-versao" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div style="background:var(--warning-light); border:1px solid var(--warning-border); color:var(--warning-text); border-radius:var(--radius-md); padding:0.85rem; font-size:0.85rem;">
+            ⚠️ <strong>Atenção:</strong> O envio de uma nova versão cancelará qualquer aprovação de impressão anterior. A nova versão precisará passar pelas validações cabíveis.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="versao-arquivo">Novo Arquivo da Prova (PDF, DOCX) *</label>
+            <input type="file" id="versao-arquivo" class="form-control" accept=".pdf,.doc,.docx,.odt" required style="padding:0.5rem;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="versao-descricao">Descrição das Alterações Realizadas *</label>
+            <textarea id="versao-descricao" class="form-control" placeholder="Ex: Correção ortográfica no enunciado da questão 4 e ajuste de espaçamento." required></textarea>
+          </div>
+
+          <!-- Opção exclusiva do Setor: Indicar se houve alteração de conteúdo -->
+          <div class="form-group setor-only" id="grp-alterou-conteudo">
+            <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; font-weight:600; cursor:pointer;">
+              <input type="checkbox" id="versao-alterou-conteudo" style="width:18px; height:18px; accent-color:var(--primary);">
+              <span>Houve alteração de conteúdo conceitual ou questões?</span>
+            </label>
+            <small style="color:var(--text-muted); font-size:0.78rem; margin-left:1.7rem;">
+              Se marcado, a versão será obrigatoriamente encaminhada para validação do professor titular.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="versao-observacoes">Observações Adicionais</label>
+            <input type="text" id="versao-observacoes" class="form-control" placeholder="Observações internas sobre o arquivo">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="fecharModalNovaVersao()">Cancelar</button>
+          <button type="submit" id="btn-enviar-versao-submit" class="btn btn-primary">
+            <span>Enviar Versão</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Validar Versão (Professor) -->
+  <div id="modal-validar-professor" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Validação da Versão pelo Professor</h3>
+        <button class="modal-close-btn" onclick="fecharModalValidarProfessor()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--text-secondary);">
+          Analise o arquivo corrigido pelo Setor de Provas e informe sua decisão de conteúdo:
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="prof-validacao-observacoes">Parecer / Observações do Professor</label>
+          <textarea id="prof-validacao-observacoes" class="form-control" placeholder="Se solicitar ajustes, descreva detalhadamente o que precisa ser corrigido..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalValidarProfessor()">Cancelar</button>
+        <button type="button" class="btn btn-danger" onclick="confirmarValidacaoProfessor('ajustes')">
+          Solicitar Ajustes
+        </button>
+        <button type="button" class="btn btn-success" onclick="confirmarValidacaoProfessor('aprovar')">
+          Aprovar Conteúdo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Aprovação Final (Setor / Aprovador) -->
+  <div id="modal-aprovacao-final" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Aprovação Final e Liberação de Impressão</h3>
+        <button class="modal-close-btn" onclick="fecharModalAprovacaoFinal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--text-secondary);">
+          Você está autorizando a versão atual desta avaliação para impressão gráfica. Certifique-se de que todas as etapas foram concluídas.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="aprovacao-final-observacoes">Observações de Liberação (opcional)</label>
+          <textarea id="aprovacao-final-observacoes" class="form-control" placeholder="Ex: Tiragem aprovada para 40 cópias. Formato A4 grampeado."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalAprovacaoFinal()">Cancelar</button>
+        <button type="button" id="btn-confirmar-aprovacao-final" class="btn btn-success" onclick="confirmarAprovacaoFinal()">
+          Confirmar e Liberar para Impressão
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/detalhes-prova.js"></script>
+</body>
+</html>

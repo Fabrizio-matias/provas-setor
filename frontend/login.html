@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Setor de Provas</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+</head>
+<body class="login-body">
+
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">P</div>
+      <h1 class="login-title">Setor de Provas</h1>
+      <p class="login-subtitle">Gestão, conferência e autorização de avaliações</p>
+    </div>
+
+    <!-- Mensagens de Alerta -->
+    <div id="login-alert" style="display: none; padding: 0.85rem; margin-bottom: 1.25rem; border-radius: var(--radius-md); font-size: 0.88rem;"></div>
+
+    <form id="form-login">
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="email" class="form-label">E-mail institucional</label>
+        <input
+          type="email"
+          id="email"
+          class="form-control"
+          placeholder="seu.email@colegio.edu.br"
+          required
+          autocomplete="username"
+        >
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label for="senha" class="form-label">Senha de acesso</label>
+          <button type="button" id="btn-toggle-senha" style="background:none; border:none; font-size:0.75rem; color:var(--primary); cursor:pointer;">
+            Mostrar
+          </button>
+        </div>
+        <input
+          type="password"
+          id="senha"
+          class="form-control"
+          placeholder="••••••••"
+          required
+          autocomplete="current-password"
+        >
+      </div>
+
+      <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%; height: 46px; font-size: 1rem;">
+        <span>Entrar no Sistema</span>
+      </button>
+    </form>
+
+    <!-- Botões de preenchimento rápido para demonstração e testes -->
+    <div class="demo-credentials-box">
+      <div class="demo-title">
+        <svg style="width:16px; height:16px; fill:currentColor;" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 12H9v-2h2v2zm0-4H9V6h2v4z"/></svg>
+        Acesso rápido para testes (Perfis pré-configurados):
+      </div>
+      <div class="demo-buttons-grid">
+        <button type="button" class="btn-demo-fill" onclick="preencherDemo('admin@colegio.edu.br', 'admin123')">
+          👑 <strong>Admin</strong><br><small>admin@colegio.edu.br</small>
+        </button>
+        <button type="button" class="btn-demo-fill" onclick="preencherDemo('carlos@colegio.edu.br', 'senha123')">
+          👨‍🏫 <strong>Professor Carlos</strong><br><small>Matemática/Física</small>
+        </button>
+        <button type="button" class="btn-demo-fill" onclick="preencherDemo('setor@colegio.edu.br', 'setor123')">
+          📋 <strong>Setor de Provas</strong><br><small>Mariana Lima</small>
+        </button>
+        <button type="button" class="btn-demo-fill" onclick="preencherDemo('aprovador@colegio.edu.br', 'aprovador123')">
+          🖨️ <strong>Aprovador Final</strong><br><small>Roberto Mendes</small>
+        </button>
+      </div>
+
+      <div style="margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 0.4rem; flex-wrap: wrap;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">API Backend:</span>
+        <button type="button" id="btn-api-vercel" class="pill-btn" onclick="alternarApi('vercel')" style="font-size: 0.72rem; padding: 0.2rem 0.6rem;">☁️ Vercel (Online)</button>
+        <button type="button" id="btn-api-local" class="pill-btn" onclick="alternarApi('local')" style="font-size: 0.72rem; padding: 0.2rem 0.6rem;">💻 Localhost</button>
+      </div>
+
+      <div style="margin-top: 0.5rem; text-align: center;">
+        <button type="button" onclick="configurarApi()" style="background: none; border: none; font-size: 0.72rem; color: var(--text-muted); cursor: pointer; text-decoration: underline;">
+          ⚙️ URL Ativa: <span id="lbl-api-url" style="color: var(--primary); font-weight: 600;"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Exibe URL atual da API e atualiza botões
+      atualizarBotoesApi();
+
+      // Alerta se a sessão tiver expirado
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('expired')) {
+        mostrarAlerta('Sua sessão expirou. Por favor, faça login novamente.', 'warning');
+      }
+
+      // Alternar visualização da senha
+      const btnToggle = document.getElementById('btn-toggle-senha');
+      const inputSenha = document.getElementById('senha');
+      btnToggle.addEventListener('click', () => {
+        if (inputSenha.type === 'password') {
+          inputSenha.type = 'text';
+          btnToggle.textContent = 'Ocultar';
+        } else {
+          inputSenha.type = 'password';
+          btnToggle.textContent = 'Mostrar';
+        }
+      });
+
+      // Submit do formulário de login
+      const form = document.getElementById('form-login');
+      const btnSubmit = document.getElementById('btn-submit');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value;
+
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<span>Autenticando...</span>';
+
+        try {
+          await Auth.login(email, senha);
+          showToast('Login realizado com sucesso! Redirecionando...', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 400);
+        } catch (error) {
+          mostrarAlerta(error.message || 'Falha ao autenticar. Verifique seus dados.', 'danger');
+        } finally {
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = '<span>Entrar no Sistema</span>';
+        }
+      });
+    });
+
+    function preencherDemo(email, senha) {
+      document.getElementById('email').value = email;
+      document.getElementById('senha').value = senha;
+    }
+
+    function mostrarAlerta(msg, tipo = 'danger') {
+      const el = document.getElementById('login-alert');
+      el.style.display = 'block';
+      if (tipo === 'danger') {
+        el.style.backgroundColor = 'var(--danger-light)';
+        el.style.color = 'var(--danger-text)';
+        el.style.border = '1px solid var(--danger-border)';
+      } else {
+        el.style.backgroundColor = 'var(--warning-light)';
+        el.style.color = 'var(--warning-text)';
+        el.style.border = '1px solid var(--warning-border)';
+      }
+      el.textContent = msg;
+    }
+
+    function atualizarBotoesApi() {
+      const atual = CONFIG.API_URL;
+      const isVercel = atual.includes('vercel.app');
+      const btnVercel = document.getElementById('btn-api-vercel');
+      const btnLocal = document.getElementById('btn-api-local');
+      if (btnVercel) btnVercel.className = 'pill-btn ' + (isVercel ? 'active' : '');
+      if (btnLocal) btnLocal.className = 'pill-btn ' + (!isVercel ? 'active' : '');
+      const lblApi = document.getElementById('lbl-api-url');
+      if (lblApi) lblApi.textContent = atual;
+    }
+
+    function alternarApi(modo) {
+      if (modo === 'vercel') {
+        CONFIG.usarVercel();
+        showToast('Conectado à API da Vercel (Produção)!', 'info');
+      } else {
+        CONFIG.usarLocal();
+        showToast('Conectado à API Local (http://localhost:5000/api)!', 'info');
+      }
+      atualizarBotoesApi();
+    }
+
+    function configurarApi() {
+      const atual = localStorage.getItem('SETOR_PROVAS_API_URL') || CONFIG.API_URL;
+      const nova = prompt('Informe a URL base da API REST (ex: https://setor-prova-rds.vercel.app/api ou http://localhost:5000/api):', atual);
+      if (nova !== null) {
+        CONFIG.setApiUrl(nova.trim());
+        atualizarBotoesApi();
+        showToast('URL da API atualizada para: ' + CONFIG.API_URL, 'info');
+      }
+    }
+  </script>
+</body>
+</html>

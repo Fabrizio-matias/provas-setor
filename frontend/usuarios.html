@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Usuários - Setor de Provas</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👥</text></svg>">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Menu Lateral (Sidebar) -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-icon">P</div>
+        <div class="brand-title">
+          <span class="brand-name">Setor de Provas</span>
+          <span class="brand-subtitle">Colégio Integrado</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Menu Principal</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="provas.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Todas as Provas
+        </a>
+        <a href="relatorios.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatórios & Métricas
+        </a>
+        <a href="usuarios.html" class="nav-item active admin-only">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Gerenciar Usuários
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="font-size: 0.72rem; color: #64748b; text-align: center;">
+          Painel de Administração
+        </div>
+      </div>
+    </aside>
+
+    <!-- Estrutura Principal -->
+    <div class="main-wrapper">
+      <!-- Header Superior -->
+      <header class="top-header">
+        <div class="header-left">
+          <button id="toggle-sidebar" class="toggle-sidebar-btn" aria-label="Abrir menu">
+            <svg style="width:24px; height:24px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h2 class="page-title-header">Gerenciamento de Usuários</h2>
+        </div>
+
+        <div class="header-right">
+          <div class="user-profile-widget">
+            <div id="user-avatar-initials" class="user-avatar">U</div>
+            <div class="user-meta">
+              <span id="user-nome" class="user-name">Carregando...</span>
+              <span id="user-perfil" class="user-role-badge">Perfil</span>
+            </div>
+          </div>
+          <button id="btn-logout" class="btn-logout" title="Sair do sistema">
+            <svg style="width:18px; height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Sair</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Conteúdo da Página -->
+      <main class="page-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1 style="font-size: 1.5rem;">Controle de Usuários e Perfis</h1>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">Cadastre novos professores, funcionários do setor e defina permissões de acesso</p>
+          </div>
+          <button class="btn btn-primary" onclick="abrirModalNovoUsuario()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Novo Usuário</span>
+          </button>
+        </div>
+
+        <!-- Filtros de Usuários -->
+        <div class="filter-bar-card" style="padding:1rem 1.5rem; margin-bottom:1.5rem;">
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+            <div class="form-group" style="flex: 2; min-width: 220px;">
+              <label class="form-label" for="busca-usuario">Buscar por Nome ou E-mail</label>
+              <input type="text" id="busca-usuario" class="form-control" placeholder="Digite o nome ou e-mail...">
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 180px;">
+              <label class="form-label" for="filtro-perfil-usuario">Perfil de Acesso</label>
+              <select id="filtro-perfil-usuario" class="form-control">
+                <option value="">Todos os Perfis</option>
+                <option value="admin">Administrador</option>
+                <option value="professor">Professor</option>
+                <option value="setor_provas">Setor de Provas</option>
+                <option value="aprovador">Aprovador Final</option>
+                <option value="coordenacao">Coordenação</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 140px;">
+              <label class="form-label" for="filtro-status-usuario">Situação</label>
+              <select id="filtro-status-usuario" class="form-control">
+                <option value="">Todos os Status</option>
+                <option value="ativo">Apenas Ativos</option>
+                <option value="inativo">Inativos</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="carregarUsuarios()" style="height: 42px;">Filtrar</button>
+          </div>
+        </div>
+
+        <!-- Tabela de Usuários -->
+        <div class="table-card">
+          <div class="table-header-box">
+            <h3 class="table-title">Usuários Cadastrados (<span id="total-usuarios">0</span>)</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome Completo</th>
+                  <th>E-mail</th>
+                  <th>Perfil de Acesso</th>
+                  <th>Disciplinas</th>
+                  <th>Situação</th>
+                  <th>Cadastro</th>
+                  <th style="text-align: right;">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-usuarios">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 2.5rem;">
+                    <div class="loading-spinner"></div>
+                    <span style="color: var(--text-muted);">Carregando usuários...</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Cadastrar Novo Usuário -->
+  <div id="modal-novo-usuario" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Cadastrar Novo Usuário</h3>
+        <button class="modal-close-btn" onclick="fecharModalNovoUsuario()">&times;</button>
+      </div>
+      <form id="form-novo-usuario">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="novo-nome">Nome Completo *</label>
+            <input type="text" id="novo-nome" class="form-control" placeholder="Ex: Maria das Graças" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="novo-email">E-mail Institucional *</label>
+            <input type="email" id="novo-email" class="form-control" placeholder="maria@colegio.edu.br" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="novo-senha">Senha Inicial *</label>
+            <input type="password" id="novo-senha" class="form-control" placeholder="Mínimo de 6 caracteres" minlength="6" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="novo-perfil">Perfil de Permissão *</label>
+            <select id="novo-perfil" class="form-control" required>
+              <option value="professor">Professor</option>
+              <option value="setor_provas">Funcionário do Setor de Provas</option>
+              <option value="aprovador">Responsável pela Aprovação Final</option>
+              <option value="coordenacao">Coordenação Pedagógica</option>
+              <option value="admin">Administrador do Sistema</option>
+            </select>
+          </div>
+          <div class="form-group" id="grp-novo-disciplinas">
+            <label class="form-label" for="novo-disciplinas">Disciplinas Leccionadas (separadas por vírgula)</label>
+            <input type="text" id="novo-disciplinas" class="form-control" placeholder="Ex: Matemática, Física, Geometria">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="fecharModalNovoUsuario()">Cancelar</button>
+          <button type="submit" id="btn-submit-novo-usuario" class="btn btn-primary">Salvar Usuário</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Editar Usuário -->
+  <div id="modal-editar-usuario" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Editar Usuário</h3>
+        <button class="modal-close-btn" onclick="fecharModalEditarUsuario()">&times;</button>
+      </div>
+      <form id="form-editar-usuario">
+        <input type="hidden" id="edit-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="edit-nome">Nome Completo *</label>
+            <input type="text" id="edit-nome" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-email">E-mail Institucional *</label>
+            <input type="email" id="edit-email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-perfil">Perfil de Permissão *</label>
+            <select id="edit-perfil" class="form-control" required>
+              <option value="professor">Professor</option>
+              <option value="setor_provas">Funcionário do Setor de Provas</option>
+              <option value="aprovador">Responsável pela Aprovação Final</option>
+              <option value="coordenacao">Coordenação Pedagógica</option>
+              <option value="admin">Administrador do Sistema</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-disciplinas">Disciplinas (separadas por vírgula)</label>
+            <input type="text" id="edit-disciplinas" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-nova-senha">Redefinir Senha (deixe em branco para não alterar)</label>
+            <input type="password" id="edit-nova-senha" class="form-control" placeholder="Nova senha (opcional)" minlength="6">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="fecharModalEditarUsuario()">Cancelar</button>
+          <button type="submit" id="btn-submit-edit-usuario" class="btn btn-primary">Atualizar Usuário</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/usuarios.js"></script>
+</body>
+</html>
